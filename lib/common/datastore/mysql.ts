@@ -1,15 +1,10 @@
 import {
   CfnOutput,
-  Stack,
-  StackProps,
   Tags,
-  App,
-  Fn,
   Duration,
   RemovalPolicy,
 } from 'aws-cdk-lib';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
-import * as logs from 'aws-cdk-lib/aws-logs';
 import * as rds from 'aws-cdk-lib/aws-rds';
 import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
@@ -48,40 +43,13 @@ interface MysqlProps {
   readonly mysqlUsername?: string;
 
   /**
-   * backup retention days for example 14
-   * @type {number}
-   * @memberof MysqlProps
-   * @default 14
-   */
-  readonly backupRetentionDays?: number;
-
-  /**
-   * backup window time 00:15-01:15
-   * @type {string}
-   * @memberof MysqlProps
-   * @default 00:15-01:15
-   */
-
-  readonly backupWindow?: string;
-
-  /**
    *
-   * maintenance time Sun:23:45-Mon:00:15
-   * @type {string}
-   * @memberof MysqlProps
-   * @default Sun:23:45-Mon:00:15
-   */
-  readonly preferredMaintenanceWindow?: string;
-
-  /**
-   *
-   * list of ingress sources
-   * @type {any []}
+   * vpc name
+   * @type {str}
    * @memberof MysqlProps
    */
-  readonly ingressSources?: any[];
-
   readonly vpcName: string;
+
 }
 
 export class Mysql extends Construct {
@@ -93,16 +61,10 @@ export class Mysql extends Construct {
     if (typeof props.mysqlUsername !== 'undefined') {
       mysqlUsername = props.mysqlUsername;
     }
-    var ingressSources = [];
-    if (typeof props.ingressSources !== 'undefined') {
-      ingressSources = props.ingressSources;
-    }
     var engineVersion = rds.MysqlEngineVersion.VER_8_0_35;
     if (typeof props.engineVersion !== 'undefined') {
       engineVersion = props.engineVersion;
     }
-
-    const azs = Fn.getAzs();
 
     // vpc
     const vpc = ec2.Vpc.fromLookup(this, 'ExistingVPC',{
@@ -125,16 +87,6 @@ export class Mysql extends Construct {
     dbsg.addIngressRule(dbsg, allAll, 'all from self');
     dbsg.addIngressRule(allowSecurityGroup, tcp3306, '3306 from SSHSecurityGroupFromKDL');
     dbsg.addEgressRule(ec2.Peer.ipv4('0.0.0.0/0'), allAll, 'all out');
-
-    const mysqlConnectionPorts = [
-      { port: tcp3306, description: 'tcp3306 Mysql' },
-    ];
-
-    for (let ingressSource of ingressSources!) {
-      for (let c of mysqlConnectionPorts) {
-        dbsg.addIngressRule(ingressSource, c.port, c.description);
-      }
-    }
 
     const dbSubnetGroup = new rds.SubnetGroup(this, 'DatabaseSubnetGroup', {
       vpc: vpc,
@@ -188,8 +140,6 @@ export class Mysql extends Construct {
       enablePerformanceInsights: true,
       parameterGroup: dbParameterGroup,
       subnetGroup: dbSubnetGroup,
-      preferredBackupWindow: props.backupWindow,
-      preferredMaintenanceWindow: props.preferredMaintenanceWindow,
       publiclyAccessible: false,
     });
 
