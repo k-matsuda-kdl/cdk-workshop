@@ -89,11 +89,7 @@ export class BastionEC2 extends Construct {
         ec2InstanceSecurityGroup.addIngressRule(Peer.ipv4(ip), Port.tcp(22), `Allow SSH access from ${ip}`);
       });
     }
-    // // 124.33.127.18/32, 52.69.217.53/32, 113.37.16.194/32のSSHアクセスを許可
-    // ec2InstanceSecurityGroup.addIngressRule(Peer.ipv4('124.33.127.18/32'), Port.tcp(22));
-    // ec2InstanceSecurityGroup.addIngressRule(Peer.ipv4('52.69.217.53/32'), Port.tcp(22));
-    // ec2InstanceSecurityGroup.addIngressRule(Peer.ipv4('113.37.16.194/32'), Port.tcp(22));
-
+    
     // Create the EC2 instance
     this.instance = new Instance(this, 'Instance', {
       vpc: vpc,
