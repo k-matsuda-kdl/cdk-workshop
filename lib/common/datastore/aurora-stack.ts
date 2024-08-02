@@ -173,7 +173,7 @@ export class Aurora extends Stack {
     });
 
     // Subnets
-    const vpcSubnets = vpc.selectSubnets({ subnetType: ec2.SubnetType.PUBLIC })
+    const vpcSubnets = vpc.selectSubnets({ subnetType: ec2.SubnetType.PRIVATE_ISOLATED })
     // const subnets: any[] = [];
 
     // for (let subnetId of subnetIds!) {

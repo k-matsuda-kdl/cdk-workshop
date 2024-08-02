@@ -16,6 +16,7 @@ import {
   AmazonLinuxCpuType,
   Peer,
   Port,
+  SubnetType,
 } from 'aws-cdk-lib/aws-ec2';
 import {
   Role,
@@ -44,7 +45,9 @@ export class BastionEC2 extends Construct {
     const vpc = Vpc.fromLookup(this, 'ExistingVpc', {
       vpcName: vpcName, // 既存のVPCのnameを指定
     });
-    
+    // Subnets
+    const vpcSubnets = vpc.selectSubnets({ subnetType: SubnetType.PUBLIC })
+
     // EC2のRoleを作成 CloudWatch Logsにログを送信するための権限を追加
     const serverRole = new Role(this, 'serverEc2Role', {
       assumedBy: new ServicePrincipal('ec2.amazonaws.com'),
@@ -98,6 +101,7 @@ export class BastionEC2 extends Construct {
         cachedInContext: false,
         cpuType: AmazonLinuxCpuType.X86_64, // x86_64とする
       }),
+      vpcSubnets: vpcSubnets,
       userData: userData,
       securityGroup: ec2InstanceSecurityGroup,
       init: CloudFormationInit.fromConfigSets({

@@ -2,7 +2,7 @@
 import * as cdk from 'aws-cdk-lib';
 import { config } from 'dotenv';
 import { BaseVpcStack } from '../lib/base-vpc-stack';
-import { Aurora } from '../lib/aurora-stack';
+import { ProductionDbStack } from '../lib/production-db-stack';
 import { BastionEC2Stack } from '../lib/bastion-ec2-stack';
 
 config();
@@ -22,18 +22,7 @@ new BastionEC2Stack(app, 'KMatsudaBastion', {
   env: devEnv,
 });
 
-const auroraProps = {
-  description:"Aurora Stack",
-  vpcId:"vpc-0e7429918fbcaa935",
-  vpcName: process.env.VPC_NAME || 'KMatsudaVPC',
-  subnetIds:["subnet-05a4b7a713c0bc3df", "subnet-0bbb073a344bd13d5"],
-  dbName:"sampledb",
-  engine:"mysql",
-  auroraClusterUsername:"homepage"  
-};
-
-const auroraStack = new Aurora(app, 'KMatsudaAurora', {
-  ...auroraProps,
+new ProductionDbStack(app, 'KMatsudaDb', {
   env: devEnv,
 });
 
