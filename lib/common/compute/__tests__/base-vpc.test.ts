@@ -1,11 +1,19 @@
 import { App, Stack } from 'aws-cdk-lib';
 import { Template, Match } from 'aws-cdk-lib/assertions';
 import { BaseVpc } from '../base-vpc';
+import { config } from 'dotenv';
+
+config();
+
+const devEnv = {
+  account: process.env.ACCOUNT_ID || '',
+  region: process.env.REGION || 'ap-northeast-1',
+};
 
 describe('BaseVpc', () => {
   test('BaseVpcのテスト PublicとPrivateとIsolatedのSubnetを確認する', () => {
     const app = new App();
-    const stack = new Stack(app, 'TestStack');
+    const stack = new Stack(app, 'TestStack', {env: devEnv});
     
     new BaseVpc(stack, 'BaseVpc', { vpcName: 'TestVPC' });
     
