@@ -12,7 +12,11 @@
 * `cdk synth`       emits the synthesized CloudFormation template
 
 ## TODO
-- InspectorをONにする
 - addValidationを確認する
 - RDSのInsightON
 - RDSのログをCloudwatchに送る
+- ECS
+- CloudFront
+- S3
+- ECSでSecretManagerからDBアクセス情報を取得する
+- ECSはVPCエンドポイントを使ってSMとECRにアクセスする（NATgatewayを使わない）
