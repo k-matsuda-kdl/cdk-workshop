@@ -26,7 +26,6 @@ describe('Mysql', () => {
     });
     
     const template = Template.fromStack(stack);
-    console.log(JSON.stringify(template.toJSON(), null, 2));
 
     // デフォルトのusernameがhomepageであることを確認
     template.hasResourceProperties('AWS::SecretsManager::Secret', {

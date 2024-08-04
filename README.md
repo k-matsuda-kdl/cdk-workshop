@@ -12,13 +12,7 @@
 * `cdk synth`       emits the synthesized CloudFormation template
 
 ## TODO
-- AuroraはPRIVATE subnet
-- AuroraのSecurity Groupは、EC2の踏み台から
-- EC2のSSHは、KDLのネットワークから
-- EC2のS3アクセスを消しておこう
-- EC2は、SSM-AgentをOnにする
 - InspectorをONにする
 - addValidationを確認する
 - RDSのInsightON
 - RDSのログをCloudwatchに送る
-- 
