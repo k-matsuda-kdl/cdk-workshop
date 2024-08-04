@@ -10,8 +10,8 @@ const devEnv = {
   region: process.env.REGION || 'ap-northeast-1',
 };
 
-describe('BaseVpc', () => {
-  test('BaseVpcのテスト PublicとPrivateとIsolatedのSubnetを確認する', () => {
+describe('基本VPC', () => {
+  test('VPCをPublicとPrivateとIsolatedのSubnetとともに構築する', () => {
     const app = new App();
     const stack = new Stack(app, 'TestStack', {env: devEnv});
     

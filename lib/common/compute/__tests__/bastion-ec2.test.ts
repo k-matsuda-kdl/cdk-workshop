@@ -10,8 +10,8 @@ const devEnv = {
   region: process.env.REGION || 'ap-northeast-1',
 };
 
-describe('BastionEC2', () => {
-  test('EC2 instance is created with correct properties', () => {
+describe('踏み台EC2を作成するテスト', () => {
+  test('t2.microのEC2にMySQLクライアントをインストールし、KDLからSSHできる状態で構築する', () => {
     const app = new cdk.App();
     const stack = new cdk.Stack(app, 'TestStack', {env: devEnv});
     

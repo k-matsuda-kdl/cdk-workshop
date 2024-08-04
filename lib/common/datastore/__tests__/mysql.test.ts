@@ -13,7 +13,7 @@ const devEnv = {
 };
 
 describe('Mysql', () => {
-  test('Mysql instance is created with correct properties', () => {
+  test('踏み台からのみ3306でアクセス可能なMySQLを構築する', () => {
     const app = new cdk.App();
     const stack = new cdk.Stack(app, 'TestStack', {env: devEnv});
 
