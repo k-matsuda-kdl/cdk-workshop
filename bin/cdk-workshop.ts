@@ -4,6 +4,8 @@ import { config } from 'dotenv';
 import { BaseVpcStack } from '../lib/base-vpc-stack';
 import { ProductionDbStack } from '../lib/production-db-stack';
 import { BastionEC2Stack } from '../lib/bastion-ec2-stack';
+import { Inspector2Stack } from '../lib/inspector2-stack';
+import { ProductionEcsStack } from '../lib/production-ecs-stack';
 
 config();
 
@@ -23,6 +25,14 @@ new BastionEC2Stack(app, 'KMatsudaBastion', {
 });
 
 new ProductionDbStack(app, 'KMatsudaDb', {
+  env: devEnv,
+});
+
+new Inspector2Stack(app, 'KMatsudaInspector2', {
+  env: devEnv,
+});
+
+new ProductionEcsStack(app, 'KMatsudaEcs', {
   env: devEnv,
 });
 

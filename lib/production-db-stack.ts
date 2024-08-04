@@ -11,7 +11,7 @@ export class ProductionDbStack extends Stack {
     const vpcName = process.env.VPC_NAME || 'KMatsudaVPC';
     const dbName = "sampledb";
 
-    // 基本のVpcを作成
+    // MySQLの作成
     const mysql = new Mysql(this, 'Mysql',{
       vpcName: vpcName,
       dbName:dbName,
