@@ -19,3 +19,6 @@
 - EC2は、SSM-AgentをOnにする
 - InspectorをONにする
 - addValidationを確認する
+- RDSのInsightON
+- RDSのログをCloudwatchに送る
+- 

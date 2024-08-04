@@ -53,6 +53,8 @@ interface MysqlProps {
 }
 
 export class Mysql extends Construct {
+  public readonly mysqlInstance: rds.DatabaseInstance;
+
   constructor(scope: Construct, id: string, props: MysqlProps) {
     super(scope, id);
 
@@ -119,7 +121,7 @@ export class Mysql extends Construct {
 
 
 
-    const mysqlInstance = new rds.DatabaseInstance(this, 'MysqlDatabase', {
+    this.mysqlInstance = new rds.DatabaseInstance(this, 'MysqlDatabase', {
       databaseName: props.dbName,
       instanceIdentifier: props.dbName,
       credentials: mysqlCredentials,
@@ -129,7 +131,7 @@ export class Mysql extends Construct {
       backupRetention: Duration.days(7),
       allocatedStorage: 20,
       securityGroups: [dbsg],
-      allowMajorVersionUpgrade: true,
+      allowMajorVersionUpgrade: false,
       autoMinorVersionUpgrade: true,
       instanceType: props.instanceType,
       vpcSubnets: vpcSubnets,
@@ -143,27 +145,11 @@ export class Mysql extends Construct {
       publiclyAccessible: false,
     });
 
-    mysqlInstance.addRotationSingleUser();
+    this.mysqlInstance.addRotationSingleUser();
 
     // Tags
-    Tags.of(mysqlInstance).add('Name', 'MysqlDatabase', {
+    Tags.of(this.mysqlInstance).add('Name', 'MysqlDatabase', {
       priority: 300,
-    });
-
-
-    new CfnOutput(this, 'MysqlEndpoint', {
-      exportName: 'MysqlEndPoint',
-      value: mysqlInstance.dbInstanceEndpointAddress,
-    });
-
-    new CfnOutput(this, 'MysqlUserName', {
-      exportName: 'MysqlUserName',
-      value: mysqlUsername,
-    });
-
-    new CfnOutput(this, 'MysqlDbName', {
-      exportName: 'MysqlDbName',
-      value: props.dbName!,
     });
   }
 }
